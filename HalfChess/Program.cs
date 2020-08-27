@@ -20,7 +20,8 @@ namespace HalfChess
                 try
                 {
                     byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
-                    byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1))) - 65);
+                    byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
+
                     if (i == board.KingBlack.I && j == board.KingBlack.J)
                     {
                         Console.WriteLine("You've entered the black king's existing coordinates...");
@@ -29,7 +30,6 @@ namespace HalfChess
                     board.KingBlack.Move(i, j);
                     Console.Clear();
                     board.Show();
-                    Console.WriteLine(Convert.ToInt32('H'));
                 }
                 catch (Exception e)
                 {

@@ -64,7 +64,7 @@ namespace HalfChess
                         {
                             case 0:
                                 {
-                                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                                    Console.BackgroundColor = ConsoleColor.Gray;
                                     break;
                                 }
                             case 1:
@@ -93,7 +93,7 @@ namespace HalfChess
                                 }
                         }
                     }
-                    
+
                     Console.Write($" {Matrix[i, j]} ");
                     Console.ResetColor();
 
