@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess\\HalfChess\\HalfChess.csproj": {}
+    "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess - Copy\\HalfChess\\HalfChess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess\\HalfChess\\HalfChess.csproj": {
+    "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess - Copy\\HalfChess\\HalfChess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess\\HalfChess\\HalfChess.csproj",
+        "projectUniqueName": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess - Copy\\HalfChess\\HalfChess.csproj",
         "projectName": "HalfChess",
-        "projectPath": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess\\HalfChess\\HalfChess.csproj",
+        "projectPath": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess - Copy\\HalfChess\\HalfChess.csproj",
         "packagesPath": "C:\\Users\\Marat\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess\\HalfChess\\obj\\",
+        "outputPath": "C:\\Users\\Marat\\Desktop\\Raf\\C# Master Class\\HalfChess - Copy\\HalfChess\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

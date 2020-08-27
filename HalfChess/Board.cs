@@ -29,17 +29,9 @@ namespace HalfChess
         {
             for (byte i = 0; i < 8; i++)
             {
-                for (byte j = (byte)(i % 2); j < 8; j += 2)
+                for (byte j = 0; j < 8; j ++)
                 {
-                    Matrix[i, j] = '*';
-                }
-            }
-
-            for (byte i = 0; i < 8; i++)
-            {
-                for (byte j = (byte)(1 - i % 2); j < 8; j += 2)
-                {
-                    Matrix[i, j] = '#';
+                    Matrix[i, j] = ' ';
                 }
             }
 
@@ -65,24 +57,43 @@ namespace HalfChess
                 Console.ResetColor();
 
                 for (byte j = 0; j < 8; j++)
-                {                    
-                    if (Matrix[i, j] is Piece)
+                {
+                    if (!(Matrix[i, j] is Piece))
                     {
-                        Piece piece = Matrix[i, j] as Piece;
-                        switch (piece.Color)
+                        switch ((i + j) % 2)
                         {
-                            case "Black":
+                            case 0:
                                 {
-                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.BackgroundColor = ConsoleColor.DarkGray;
                                     break;
                                 }
-                            case "White":
+                            case 1:
                                 {
-                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.BackgroundColor = ConsoleColor.Black;
                                     break;
                                 }
                         }
                     }
+                    else
+                    {
+                        Piece piece = Matrix[i, j] as Piece;
+                        switch(piece.Color)
+                        {
+                            case "Black":
+                                {
+                                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                                    Console.ForegroundColor = ConsoleColor.Black;
+                                    break;
+                                }
+                            case "White":
+                                {
+                                    Console.BackgroundColor = ConsoleColor.Red;
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    break;
+                                }
+                        }
+                    }
+                    
                     Console.Write($" {Matrix[i, j]} ");
                     Console.ResetColor();
 
