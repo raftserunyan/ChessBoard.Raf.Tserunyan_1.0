@@ -1,0 +1,13 @@
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.exe
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.deps.json
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.runtimeconfig.json
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.runtimeconfig.dev.json
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.dll
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\bin\Debug\netcoreapp3.1\HalfChess.pdb
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.csprojAssemblyReference.cache
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.AssemblyInfoInputs.cache
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.AssemblyInfo.cs
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.csproj.CoreCompileInputs.cache
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.dll
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.pdb
+C:\Users\Marat\Desktop\Raf\C# Master Class\HalfChess\HalfChess\obj\Debug\netcoreapp3.1\HalfChess.genruntimeconfig.cache
