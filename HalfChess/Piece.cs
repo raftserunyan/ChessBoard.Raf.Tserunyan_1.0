@@ -74,47 +74,86 @@ namespace HalfChess
                                 else if (j == board.Matrix.GetLength(1))
                                     break;
 
-                                AvailableCells.Add(board.Matrix[i, j]);
+                                if (i == this.I && j == this.J)
+                                    continue;
+
+                                AddToListIfNeeded(board.Matrix[i, j]);
                             }
                         }
                         break;
                     }
                 case "Queen":
                     {
-                        
-                        for (int t = 0; t < 8; t++)
+                        bool CanGoRight = true, CanGoLeft = true, CanGoUp = true, CanGoDown = true;
+                        bool CanGoUpLeft = true, CanGoUpRight = true, CanGoDownRight = true, CanGoDownLeft = true;
+                        for (int t = 1; t < 8; t++)
                         {
-                            AvailableCells.Add(board.Matrix[t, J]);
-                            AvailableCells.Add(board.Matrix[I, t]);
+                            if(I - t >= 0 && CanGoUp)
+                                AddToListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
+                            if (I + t < 8 && CanGoDown)
+                                AddToListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
+                            if (J + t < 8 && CanGoRight)
+                                AddToListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
+                            if (J - t >= 0 && CanGoLeft)
+                                AddToListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
 
-                            if (I - t >= 0 && J - t >= 0)
-                              AvailableCells.Add(board.Matrix[I - t, J - t]);
-                            if (I - t >= 0 && J + t < 8)
-                              AvailableCells.Add(board.Matrix[I - t, J + t]);
-                            if (I + t < 8 && J + t < 8)
-                                AvailableCells.Add(board.Matrix[I + t, J + t]);
-                            if (I + t < 8 && J - t >= 0)
-                                AvailableCells.Add(board.Matrix[I + t, J - t]);
+                            if (I - t >= 0 && J - t >= 0 && CanGoUpLeft)
+                                AddToListIfNeeded(board.Matrix[I - t, J - t], ref CanGoUpLeft);
+                            if (I - t >= 0 && J + t < 8 && CanGoUpRight)
+                                AddToListIfNeeded(board.Matrix[I - t, J + t], ref CanGoUpRight);
+                            if (I + t < 8 && J + t < 8 && CanGoDownRight)
+                                AddToListIfNeeded(board.Matrix[I + t, J + t], ref CanGoDownRight);
+                            if (I + t < 8 && J - t >= 0 && CanGoDownLeft)
+                                AddToListIfNeeded(board.Matrix[I + t, J - t], ref CanGoDownLeft);
                         }
-                        
                         break;
                     }
                 case "Rook":
                     {
-                        for (int t = 0; t < 8; t++)
+                        bool CanGoRight = true, CanGoLeft = true, CanGoUp = true, CanGoDown = true;
+                        for (int t = 1; t < 8; t++)
                         {
-                            AvailableCells.Add(board.Matrix[t, J]);
-                            AvailableCells.Add(board.Matrix[I, t]);
+                            if (I - t >= 0 && CanGoUp)
+                                AddToListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
+                            if (I + t < 8 && CanGoDown)
+                                AddToListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
+                            if (J + t < 8 && CanGoRight)
+                                AddToListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
+                            if (J - t >= 0 && CanGoLeft)
+                                AddToListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
                         }
-                            break;
+                        break;
                     }
+            }
+        }
+
+        private void AddToListIfNeeded(object newPiece)
+        {
+            if (!(newPiece is Piece))
+                AvailableCells.Add(newPiece);
+            else
+            {
+                Piece piece = newPiece as Piece;
+                if (piece.Color != this.Color)
+                    AvailableCells.Add(piece);
+            }
+        }
+        private void AddToListIfNeeded(object newPiece, ref bool direction)
+        {
+            if (!(newPiece is Piece))
+                AvailableCells.Add(newPiece);
+            else
+            {
+                Piece piece = newPiece as Piece;
+                if (piece.Color != this.Color)
+                    AvailableCells.Add(piece);
+                direction = false;
             }
         }
 
         public void PutOnBoard()
         {
             board.Matrix[this.I, this.J] = this;
-            SetAvailableCells();
         }
 
         public void Move(byte _i, byte _j)
