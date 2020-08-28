@@ -103,7 +103,7 @@ namespace HalfChess
                     }
 
                     ////
-                    foreach (var item in RookWhiteLeft.AvailableCells)
+                    foreach (var item in KingBlack.AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
