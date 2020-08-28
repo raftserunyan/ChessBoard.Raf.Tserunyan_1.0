@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HalfChess
 {
@@ -31,6 +32,12 @@ namespace HalfChess
                     Console.ResetColor();
                 }
             }
+        }
+
+        public static void SystemMakeMove()
+        {
+            List<Piece> pieces = new List<Piece>();
+            
         }
     }
 }

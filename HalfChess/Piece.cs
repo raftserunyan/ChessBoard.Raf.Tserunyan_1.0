@@ -185,6 +185,6 @@ namespace HalfChess
             {
                 throw e;
             }
-        }
+        } //Needs to be completed: remove a piece when eating
     }
 }
