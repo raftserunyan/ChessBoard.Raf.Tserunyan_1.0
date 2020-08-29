@@ -5,9 +5,12 @@ namespace HalfChess
 {
     class Program
     {
+        static Board board;
+        public static List<Piece> WhitePieces;
+
         static void Main(string[] args)
         {
-            Board board = new Board();
+            board = new Board();
             board.Show();
 
             bool InputSucceed = false;
@@ -34,10 +37,23 @@ namespace HalfChess
             }
         }
 
-        public static void SystemMakeMove()
+        
+
+        private static void SystemMakeMove()
         {
-            List<Piece> pieces = new List<Piece>();
             
+
+            foreach (Piece item in WhitePieces)
+            {
+
+            }
         }
+
+        //Board brd = (Board)board.Clone();
+        //private static int GetAmountOfMovesToKing(Piece piece)
+        //{
+        //    piece.AvailableCells[0]
+        //}
+
     }
 }

@@ -77,6 +77,18 @@ namespace HalfChess
                                 if (i == this.I && j == this.J)
                                     continue;
 
+                                bool isShax = false;
+
+                                foreach (Piece item in Board.WhitePieces)
+                                {
+                                    foreach (object cell in item.AvailableCells)
+                                    {
+                                        if (board.Matrix[i, j] == cell)
+                                            isShax = true;
+                                    }
+                                }
+
+                                if(!isShax)
                                 AddToListIfNeeded(board.Matrix[i, j]);
                             }
                         }

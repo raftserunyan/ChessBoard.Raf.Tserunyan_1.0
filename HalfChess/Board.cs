@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HalfChess
 {
-    public class Board
+    public class Board : ICloneable
     {
         public Piece KingBlack, KingWhite, QueenWhite, RookWhiteLeft, RookWhiteRight;
         public object[,] Matrix;
+
+        public static List<Piece> WhitePieces;
 
         public object this[byte i, byte j]
         {
@@ -23,6 +26,8 @@ namespace HalfChess
             RookWhiteRight = new Piece("Rook", "White", 7, 7); // 6 6
             QueenWhite = new Piece("Queen", "White", 7, 3); // 4 4
 
+            InitializeWhitePieces();
+
             Create();
         }
 
@@ -38,16 +43,20 @@ namespace HalfChess
 
             RookWhiteLeft.PutOnBoard();
             RookWhiteRight.PutOnBoard();
-            KingBlack.PutOnBoard();
-            KingWhite.PutOnBoard();
             QueenWhite.PutOnBoard();
-
+            KingWhite.PutOnBoard();
+            KingBlack.PutOnBoard();
+            
+            //
+            //
+            
             //Temporary, later you should add this into the Move() method
             RookWhiteLeft.SetAvailableCells();
             RookWhiteRight.SetAvailableCells();
-            KingBlack.SetAvailableCells();
-            KingWhite.SetAvailableCells();
             QueenWhite.SetAvailableCells();
+            KingWhite.SetAvailableCells();
+            KingBlack.SetAvailableCells();
+
         } //temporary shit in here
 
         public void Show()
@@ -132,6 +141,22 @@ namespace HalfChess
             Console.WriteLine("|   | A | B | C | D | E | F | G | H |   |");
             Console.WriteLine("-----------------------------------------");
             Console.ResetColor();
+        }
+
+        public void InitializeWhitePieces()
+        {
+            WhitePieces = new List<Piece>
+            {
+                KingWhite,
+                QueenWhite,
+                RookWhiteLeft,
+                RookWhiteRight
+            };
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }
