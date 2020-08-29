@@ -21,10 +21,10 @@ namespace HalfChess
             Piece.board = this;
             Matrix = new object[8, 8];
             KingBlack = new Piece("King", "Black", 0, 4); // 2 2 
-            KingWhite = new Piece("King", "White", 7, 4); // 6 4
+            KingWhite = new Piece("King", "White", 7, 4); // 7 4
             RookWhiteLeft = new Piece("Rook", "White", 7, 0); // 2 4
-            RookWhiteRight = new Piece("Rook", "White", 7, 7); // 6 6
-            QueenWhite = new Piece("Queen", "White", 7, 3); // 4 4
+            RookWhiteRight = new Piece("Rook", "White", 7, 7); // 7 7
+            QueenWhite = new Piece("Queen", "White", 7, 3); // 7 3
 
             InitializeWhitePieces();
 
@@ -35,7 +35,7 @@ namespace HalfChess
         {
             for (byte i = 0; i < 8; i++)
             {
-                for (byte j = 0; j < 8; j ++)
+                for (byte j = 0; j < 8; j++)
                 {
                     Matrix[i, j] = ' ';
                 }
@@ -46,10 +46,7 @@ namespace HalfChess
             QueenWhite.PutOnBoard();
             KingWhite.PutOnBoard();
             KingBlack.PutOnBoard();
-            
-            //
-            //
-            
+
             //Temporary, later you should add this into the Move() method
             RookWhiteLeft.SetAvailableCells();
             RookWhiteRight.SetAvailableCells();
@@ -95,30 +92,49 @@ namespace HalfChess
                     else
                     {
                         Piece piece = Matrix[i, j] as Piece;
-                        switch(piece.Color)
+                        switch (piece.Color)
                         {
                             case "Black":
                                 {
                                     Console.BackgroundColor = ConsoleColor.DarkGreen;
-                                    Console.ForegroundColor = ConsoleColor.Black;
                                     break;
                                 }
                             case "White":
                                 {
                                     Console.BackgroundColor = ConsoleColor.Red;
-                                    Console.ForegroundColor = ConsoleColor.White;
                                     break;
                                 }
                         }
                     }
 
                     ////
-                    foreach (var item in KingBlack.AvailableCells)
+                    foreach (var item in QueenWhite.AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
                     }
                     ////
+
+                    //Choosing the right ForeColor for a better UI;
+                    switch (Console.BackgroundColor)
+                    {
+                        case ConsoleColor.Green:
+                            {
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                break;
+                            }
+                        case ConsoleColor.DarkGreen:
+                            {
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                break;
+                            }
+                        default:
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                                break;
+                            }
+                    }
+
                     Console.Write($" {Matrix[i, j]} ");
                     Console.ResetColor();
 

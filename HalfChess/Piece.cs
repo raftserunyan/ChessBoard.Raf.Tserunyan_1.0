@@ -77,12 +77,13 @@ namespace HalfChess
                                 if (i == this.I && j == this.J)
                                     continue;
 
+                                //Cheking if going to that destination is not dangerous
                                 bool isShax = false;
-
                                 foreach (Piece item in Board.WhitePieces)
                                 {
                                     foreach (object cell in item.AvailableCells)
                                     {
+
                                         if (board.Matrix[i, j] == cell)
                                             isShax = true;
                                     }
