@@ -106,7 +106,7 @@ namespace HalfChess
                     }
 
                     //Coloring available cells
-                    foreach (var item in QueenWhite.AvailableCells)
+                    foreach (var item in KingBlack.AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
