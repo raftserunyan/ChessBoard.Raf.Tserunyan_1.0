@@ -49,6 +49,8 @@ namespace HalfChess
             }
         }
 
+        public byte AmountOfMovesToKing;
+
         public override string ToString()
         {
             return this.Name.Substring(0, 1);

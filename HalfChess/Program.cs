@@ -6,16 +6,13 @@ namespace HalfChess
     class Program
     {
         static Board board;
-        public static List<Piece> WhitePieces;
 
         static void Main(string[] args)
         {
             board = new Board();
             board.Show();
 
-            bool InputSucceed = false;
-
-            while (!InputSucceed)
+            while (true)
             {
                 Console.WriteLine();
                 Console.Write("Enter new coordinates for the black king (example: 5 G): ");
@@ -37,23 +34,22 @@ namespace HalfChess
             }
         }
 
-        
-
         private static void SystemMakeMove()
         {
-            
-
-            foreach (Piece item in WhitePieces)
+            foreach (Piece item in Board.WhitePieces)
             {
-
+                for (int i = 0; i < item.AvailableCells.Count; i++)
+                {
+                    item.AmountOfMovesToKing = (byte)GetAmountOfMovesToKing(item.AvailableCells[i]);
+                }
             }
         }
 
-        //Board brd = (Board)board.Clone();
-        //private static int GetAmountOfMovesToKing(Piece piece)
-        //{
-        //    piece.AvailableCells[0]
-        //}
-
+        Board brd = (Board)board.Clone();
+        List<byte> list = new List<byte>();
+        private static int GetAmountOfMovesToKing(object cell)
+        {
+            return 5;
+        }
     }
 }
