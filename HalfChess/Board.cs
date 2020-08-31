@@ -47,11 +47,20 @@ namespace HalfChess
             KingWhite.PutOnBoard();
             KingBlack.PutOnBoard();
 
+            RookWhiteLeft.SetEatableCells();
+            RookWhiteRight.SetEatableCells();
+            QueenWhite.SetEatableCells();
+            KingWhite.SetEatableCells();
+            KingBlack.SetEatableCells();
+
             RookWhiteLeft.SetAvailableCells();
             RookWhiteRight.SetAvailableCells();
             QueenWhite.SetAvailableCells();
             KingWhite.SetAvailableCells();
             KingBlack.SetAvailableCells();
+
+
+
         }
 
         public void Show()

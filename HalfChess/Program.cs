@@ -7,6 +7,7 @@ namespace HalfChess
     class Program
     {
         static Board board;
+        static bool isMate = false;
 
         static void Main(string[] args)
         {
@@ -14,43 +15,26 @@ namespace HalfChess
             board.Show();
 
             int s = 0;
-            bool isMate = false;
             while (!isMate)
             {
                 //Checking for mate
-                foreach (Piece pi in board.WhitePieces)
-                {
-                    foreach (object cell in pi.AvailableCells)
-                    {
-                        if (cell == board.KingBlack)
-                        {
-                            isMate = true;
+                //foreach (Piece pi in board.WhitePieces)
+                //{
+                //    bool CanKingEatHim = board.KingBlack.CanEat(pi);
 
-                            board.KingBlack.AvailableCells.Clear();
-                            Console.Clear();
-                            board.Show();
-
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("MATE!");
-                            Console.ReadKey();
-                        }
-                    }
-                }
+                //    if (!CanKingEatHim)
+                //    {
+                //        foreach (object cell in pi.AvailableCells)
+                //        {
+                //            if (cell == board.KingBlack && !CanKingEatHim)
+                //                Mate();
+                //        }
+                //    }
+                //}
 
                 //Checking for mate
-                if (board.KingBlack.AvailableCells.Count < 1)
-                {
-                    isMate = true;
-
-                    board.KingBlack.AvailableCells.Clear();
-                    Console.Clear();
-                    board.Show();
-
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("MATE!");
-                    Console.ReadKey();
-                }
-
+                if (!board.KingBlack.HasSomewhereToGo)
+                    Mate();
 
                 if (!isMate)
                 {
@@ -61,8 +45,6 @@ namespace HalfChess
                     try
                     {
                         board.KingBlack.Move(coordinates);
-                        //Console.Clear();
-                        //board.Show();
 
                         Thread.Sleep(1000);
 
@@ -97,9 +79,22 @@ namespace HalfChess
             }
         }
 
+        public static void Mate()
+        {
+            isMate = true;
+
+            board.KingBlack.AvailableCells.Clear();
+            Console.Clear();
+            board.Show();
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("MATE!");
+            Console.ReadKey();
+        }
+
         private static void SystemMakeMove()
         {
-           
+
         }
 
         private static int GetAmountOfMovesToKing(object cell)

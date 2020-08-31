@@ -7,6 +7,7 @@ namespace HalfChess
     {
         public static Board board;
         public List<object> AvailableCells = new List<object>();
+        public List<object> EatableCells = new List<object>();
 
         public Piece(string name, string color, int _i, int _j)
         {
@@ -56,7 +57,7 @@ namespace HalfChess
             return this.Name.Substring(0, 1);
         }
 
-        public void SetAvailableCells()
+        public void SetEatableCells()
         {
             switch (this.Name)
             {
@@ -79,22 +80,122 @@ namespace HalfChess
                                 if (i == this.I && j == this.J)
                                     continue;
 
+                                EatableCells.Add(board.Matrix[i, j]);
+                            }
+                        }
+                        break;
+                    }
+                case "Queen":
+                    {
+                        for (int t = 1; t < 8; t++)
+                        {
+                            if (I - t >= 0)
+                                EatableCells.Add(board.Matrix[I - t, J]);
+                            if (I + t < 8)
+                                EatableCells.Add(board.Matrix[I + t, J]);
+                            if (J + t < 8)
+                                EatableCells.Add(board.Matrix[I, J + t]);
+                            if (J - t >= 0)
+                                EatableCells.Add(board.Matrix[I, J - t]);
+
+                            if (I - t >= 0 && J - t >= 0)
+                                EatableCells.Add(board.Matrix[I - t, J - t]);
+                            if (I - t >= 0 && J + t < 8)
+                                EatableCells.Add(board.Matrix[I - t, J + t]);
+                            if (I + t < 8 && J + t < 8)
+                                EatableCells.Add(board.Matrix[I + t, J + t]);
+                            if (I + t < 8 && J - t >= 0)
+                                EatableCells.Add(board.Matrix[I + t, J - t]);
+                        }
+                        break;
+                    }
+                case "Rook":
+                    {
+                        for (int t = 1; t < 8; t++)
+                        {
+                            if (I - t >= 0)
+                                EatableCells.Add(board.Matrix[I - t, J]);
+                            if (I + t < 8)
+                                EatableCells.Add(board.Matrix[I + t, J]);
+                            if (J + t < 8)
+                                EatableCells.Add(board.Matrix[I, J + t]);
+                            if (J - t >= 0)
+                                EatableCells.Add(board.Matrix[I, J - t]);
+                        }
+                        break;
+                    }
+            }
+        }
+
+        public void SetAvailableCells()
+        {
+            switch (this.Name)
+            {
+                case "King":
+                    {
+                        byte reali = I, realj = J;
+
+                        for (int i = I - 1; i < I + 2; i++)
+                        {
+                            if (i < 0)
+                                continue;
+                            else if (i == board.Matrix.GetLength(0))
+                                break;
+
+                            for (int j = J - 1; j < J + 2; j++)
+                            {
+                                if (j < 0)
+                                    continue;
+                                else if (j == board.Matrix.GetLength(1))
+                                    break;
+
+                                if (i == this.I && j == this.J)
+                                    continue;
+
+                                board.Matrix[I, J] = ' ';
+
                                 //Cheking if going to that destination is not dangerous
                                 bool isShax = false;
                                 foreach (Piece item in board.WhitePieces)
                                 {
-                                    foreach (object cell in item.AvailableCells)
+                                    foreach (object cell in item.EatableCells)
                                     {
-
                                         if (board.Matrix[i, j] == cell)
                                             isShax = true;
                                     }
                                 }
 
-                                if(!isShax)
-                                AddToListIfNeeded(board.Matrix[i, j]);
+                                if (!isShax)
+                                    AddToListIfNeeded(board.Matrix[i, j]);
+                                board.Matrix[I, J] = this;
+
+                                //Board brd = (Board)board.Clone();
+                                //isShax = false;
+
+                                //brd.Matrix[i, j] = this;
+                                //brd.Matrix[I, J] = ' ';
+                                //I = (byte)i; J = (byte)j;
+                                //foreach (Piece pc in brd.WhitePieces)
+                                //{
+                                //    bool t = true;
+                                //    if (t)
+                                //    {
+                                //        foreach (object cell in pc.AvailableCells)
+                                //        {
+                                //            if (cell == this)
+                                //            {
+                                //                isShax = true;
+                                //                t = false;
+                                //                break;
+                                //            }
+                                //        }
+                                //    }
+                                //    else
+                                //        break;
+                                //}
                             }
                         }
+
                         break;
                     }
                 case "Queen":
@@ -204,18 +305,35 @@ namespace HalfChess
                 I = i;
                 J = j;
 
+                #region Clearing and reloading lists
+
+                board.RookWhiteLeft.EatableCells.Clear();
+                board.RookWhiteRight.EatableCells.Clear();
+                board.KingBlack.EatableCells.Clear();
+                board.KingWhite.EatableCells.Clear();
+                board.QueenWhite.EatableCells.Clear();
+
+                board.RookWhiteLeft.SetEatableCells();
+                board.RookWhiteRight.SetEatableCells();
+                board.QueenWhite.SetEatableCells();
+                board.KingWhite.SetEatableCells();
+                board.KingBlack.SetEatableCells();
+
+
                 board.RookWhiteLeft.AvailableCells.Clear();
                 board.RookWhiteRight.AvailableCells.Clear();
                 board.KingBlack.AvailableCells.Clear();
                 board.KingWhite.AvailableCells.Clear();
                 board.QueenWhite.AvailableCells.Clear();
 
-
                 board.RookWhiteLeft.SetAvailableCells();
                 board.RookWhiteRight.SetAvailableCells();
                 board.QueenWhite.SetAvailableCells();
                 board.KingWhite.SetAvailableCells();
                 board.KingBlack.SetAvailableCells();
+
+                #endregion
+
                 board.Show();
             }
             catch (Exception e)
@@ -223,5 +341,31 @@ namespace HalfChess
                 throw e;
             }
         } //Needs to be completed: remove a piece when eating
+
+        public bool CanEat(Piece pc)
+        {
+            bool CanKingEatHim = false;
+
+            foreach (object kingCell in board.KingBlack.AvailableCells)
+            {
+                if (kingCell == pc)
+                {
+                    CanKingEatHim = true;
+                    break;
+                }
+            }
+            return CanKingEatHim;
+        }
+
+        public bool HasSomewhereToGo
+        {
+            get
+            {
+                if (AvailableCells.Count > 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
     }
 }
