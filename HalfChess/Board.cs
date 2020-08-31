@@ -21,7 +21,7 @@ namespace HalfChess
 
             Pieces = new List<Piece>
             {
-                new Piece("King", "Black", 0, 4),
+                new Piece("King", "Black", 4, 4),
                 new Piece("King", "White", 7, 4),
                 new Piece("Queen", "White", 7, 3),
                 new Piece("Rook", "White", 7, 0),
@@ -111,12 +111,19 @@ namespace HalfChess
                         }
                     }
 
+                    //----------------------------------------------------------------------------------
                     //Coloring available cells
                     foreach (var item in Pieces[0].AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
                     }
+                    foreach (var item in Pieces[3].AvailableCells)
+                    {
+                        if (Matrix[i, j] == item)
+                            Console.BackgroundColor = ConsoleColor.Blue;
+                    }
+                    //----------------------------------------------------------------------------------
 
                     //Choosing the right ForeColor for a better UI;
                     switch (Console.BackgroundColor)
