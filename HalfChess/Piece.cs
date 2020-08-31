@@ -342,19 +342,14 @@ namespace HalfChess
             }
         }
 
-        public bool CanEat(Piece pc)
+        public bool CanEat(Piece piece)
         {
-            bool CanKingEatHim = false;
-
-            foreach (object kingCell in board.Pieces[0].AvailableCells)
+            foreach (object cell in this.AvailableCells)
             {
-                if (kingCell == pc)
-                {
-                    CanKingEatHim = true;
-                    break;
-                }
+                if (cell == piece)
+                    return true;
             }
-            return CanKingEatHim;
+            return false;
         }
 
         public bool HasSomewhereToGo

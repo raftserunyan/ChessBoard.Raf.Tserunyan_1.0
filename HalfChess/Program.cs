@@ -13,7 +13,6 @@ namespace HalfChess
             board = new Board();
             board.Show();
 
-            int s = 0;
             while (!isMate)
             {
                 //Checking for mate
@@ -27,27 +26,21 @@ namespace HalfChess
                     string coordinates = Console.ReadLine();
 
                     try
-                    {
+                    { 
                         board.Pieces[0].Move(coordinates);
 
                         Thread.Sleep(1200);
+                        SystemMakeMove();
 
-                        switch (s)
+                        //Check for shakh
+                        if (IsShakh())
                         {
-                            case 0:
-                                {
-                                    board.Pieces[4].Move("7 h");
-                                    s++;
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    board.Pieces[3].Move("8 a");
-                                    break;
-                                }
-                            default:
-                                break;
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("System> Shakh!");
+                            Console.ResetColor();
                         }
+
                     }
                     catch (Exception e)
                     {
@@ -73,14 +66,40 @@ namespace HalfChess
             Console.ReadKey();
         }
 
+        private static byte s = 0;
         private static void SystemMakeMove()
         {
-
+            switch (s)
+            {
+                case 0:
+                    {
+                        board.Pieces[4].Move("7 h");
+                        s++;
+                        break;
+                    }
+                case 1:
+                    {
+                        board.Pieces[3].Move("8 a");
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
 
         private static int GetAmountOfMovesToKing(object cell)
         {
             return 5;
+        }
+
+        private static bool IsShakh()
+        {
+            foreach (Piece piece in board.Pieces)
+            {
+                if (piece.CanEat(board.Pieces[0]))
+                    return true;
+            }
+            return false;
         }
     }
 }
