@@ -81,7 +81,7 @@ namespace HalfChess
 
                                 //Cheking if going to that destination is not dangerous
                                 bool isShax = false;
-                                foreach (Piece item in Board.WhitePieces)
+                                foreach (Piece item in board.WhitePieces)
                                 {
                                     foreach (object cell in item.AvailableCells)
                                     {
@@ -204,8 +204,18 @@ namespace HalfChess
                 I = i;
                 J = j;
 
-                AvailableCells.Clear();
-                SetAvailableCells();
+                board.RookWhiteLeft.AvailableCells.Clear();
+                board.RookWhiteRight.AvailableCells.Clear();
+                board.KingBlack.AvailableCells.Clear();
+                board.KingWhite.AvailableCells.Clear();
+                board.QueenWhite.AvailableCells.Clear();
+
+
+                board.RookWhiteLeft.SetAvailableCells();
+                board.RookWhiteRight.SetAvailableCells();
+                board.QueenWhite.SetAvailableCells();
+                board.KingWhite.SetAvailableCells();
+                board.KingBlack.SetAvailableCells();
                 board.Show();
             }
             catch (Exception e)

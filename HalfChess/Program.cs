@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace HalfChess
 {
@@ -12,41 +13,95 @@ namespace HalfChess
             board = new Board();
             board.Show();
 
-            while (true)
+            int s = 0;
+            bool isMate = false;
+            while (!isMate)
             {
-                Console.WriteLine();
-                Console.Write("Enter new coordinates for the black king (example: 5 G): ");
-                string coordinates = Console.ReadLine();
-
-                try
+                //Checking for mate
+                foreach (Piece pi in board.WhitePieces)
                 {
-                    board.KingBlack.Move(coordinates);
+                    foreach (object cell in pi.AvailableCells)
+                    {
+                        if (cell == board.KingBlack)
+                        {
+                            isMate = true;
+
+                            board.KingBlack.AvailableCells.Clear();
+                            Console.Clear();
+                            board.Show();
+
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("MATE!");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+
+                //Checking for mate
+                if (board.KingBlack.AvailableCells.Count < 1)
+                {
+                    isMate = true;
+
+                    board.KingBlack.AvailableCells.Clear();
                     Console.Clear();
                     board.Show();
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("MATE!");
+                    Console.ReadKey();
                 }
-                catch (Exception e)
+
+
+                if (!isMate)
                 {
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(e.Message);
-                    Console.ResetColor();
+                    Console.Write("Enter new coordinates for the black king (example: 7 F): ");
+                    string coordinates = Console.ReadLine();
+
+                    try
+                    {
+                        board.KingBlack.Move(coordinates);
+                        //Console.Clear();
+                        //board.Show();
+
+                        Thread.Sleep(1000);
+
+                        switch (s)
+                        {
+                            case 0:
+                                {
+                                    board.RookWhiteRight.Move("7 h");
+                                    s++;
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    board.RookWhiteLeft.Move("8 a");
+                                    break;
+                                }
+                            default:
+                                break;
+                        }
+
+                        //Console.Clear();
+                        //board.Show();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(e.Message);
+                        Console.ResetColor();
+                    }
                 }
             }
         }
 
         private static void SystemMakeMove()
         {
-            foreach (Piece item in Board.WhitePieces)
-            {
-                for (int i = 0; i < item.AvailableCells.Count; i++)
-                {
-                    item.AmountOfMovesToKing = (byte)GetAmountOfMovesToKing(item.AvailableCells[i]);
-                }
-            }
+           
         }
 
-        Board brd = (Board)board.Clone();
-        List<byte> list = new List<byte>();
         private static int GetAmountOfMovesToKing(object cell)
         {
             return 5;

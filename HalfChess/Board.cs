@@ -8,7 +8,7 @@ namespace HalfChess
         public Piece KingBlack, KingWhite, QueenWhite, RookWhiteLeft, RookWhiteRight;
         public object[,] Matrix;
 
-        public static List<Piece> WhitePieces;
+        public List<Piece> WhitePieces;
 
         public object this[byte i, byte j]
         {
@@ -56,6 +56,8 @@ namespace HalfChess
 
         public void Show()
         {
+            Console.Clear();
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("|   | A | B | C | D | E | F | G | H |   |");
