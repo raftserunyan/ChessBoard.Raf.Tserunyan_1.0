@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace HalfChess
@@ -18,22 +17,7 @@ namespace HalfChess
             while (!isMate)
             {
                 //Checking for mate
-                //foreach (Piece pi in board.WhitePieces)
-                //{
-                //    bool CanKingEatHim = board.KingBlack.CanEat(pi);
-
-                //    if (!CanKingEatHim)
-                //    {
-                //        foreach (object cell in pi.AvailableCells)
-                //        {
-                //            if (cell == board.KingBlack && !CanKingEatHim)
-                //                Mate();
-                //        }
-                //    }
-                //}
-
-                //Checking for mate
-                if (!board.KingBlack.HasSomewhereToGo)
+                if (!board.Pieces[0].HasSomewhereToGo)
                     Mate();
 
                 if (!isMate)
@@ -44,29 +28,26 @@ namespace HalfChess
 
                     try
                     {
-                        board.KingBlack.Move(coordinates);
+                        board.Pieces[0].Move(coordinates);
 
-                        Thread.Sleep(1000);
+                        Thread.Sleep(1200);
 
                         switch (s)
                         {
                             case 0:
                                 {
-                                    board.RookWhiteRight.Move("7 h");
+                                    board.Pieces[4].Move("7 h");
                                     s++;
                                     break;
                                 }
                             case 1:
                                 {
-                                    board.RookWhiteLeft.Move("8 a");
+                                    board.Pieces[3].Move("8 a");
                                     break;
                                 }
                             default:
                                 break;
                         }
-
-                        //Console.Clear();
-                        //board.Show();
                     }
                     catch (Exception e)
                     {
@@ -83,7 +64,7 @@ namespace HalfChess
         {
             isMate = true;
 
-            board.KingBlack.AvailableCells.Clear();
+            board.Pieces[0].AvailableCells.Clear();
             Console.Clear();
             board.Show();
 

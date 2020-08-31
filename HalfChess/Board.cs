@@ -5,10 +5,8 @@ namespace HalfChess
 {
     public class Board : ICloneable
     {
-        public Piece KingBlack, KingWhite, QueenWhite, RookWhiteLeft, RookWhiteRight;
+        public List<Piece> Pieces, WhitePieces;
         public object[,] Matrix;
-
-        public List<Piece> WhitePieces;
 
         public object this[byte i, byte j]
         {
@@ -20,11 +18,15 @@ namespace HalfChess
         {
             Piece.board = this;
             Matrix = new object[8, 8];
-            KingBlack = new Piece("King", "Black", 0, 4);
-            KingWhite = new Piece("King", "White", 7, 4);
-            RookWhiteLeft = new Piece("Rook", "White", 7, 0);
-            RookWhiteRight = new Piece("Rook", "White", 7, 7);
-            QueenWhite = new Piece("Queen", "White", 7, 3);
+
+            Pieces = new List<Piece>
+            {
+                new Piece("King", "Black", 0, 4),
+                new Piece("King", "White", 7, 4),
+                new Piece("Queen", "White", 7, 3),
+                new Piece("Rook", "White", 7, 0),
+                new Piece("Rook", "White", 7, 7)
+            };
 
             InitializeWhitePieces();
 
@@ -41,26 +43,19 @@ namespace HalfChess
                 }
             }
 
-            RookWhiteLeft.PutOnBoard();
-            RookWhiteRight.PutOnBoard();
-            QueenWhite.PutOnBoard();
-            KingWhite.PutOnBoard();
-            KingBlack.PutOnBoard();
+            #region Putting on the board and setting cells
 
-            RookWhiteLeft.SetEatableCells();
-            RookWhiteRight.SetEatableCells();
-            QueenWhite.SetEatableCells();
-            KingWhite.SetEatableCells();
-            KingBlack.SetEatableCells();
+            foreach (Piece item in Pieces)
+            {
+                item.PutOnBoard();
+                item.SetEatableCells();
+            }
+            foreach (Piece item in Pieces)
+            {
+                item.SetAvailableCells();
+            }
 
-            RookWhiteLeft.SetAvailableCells();
-            RookWhiteRight.SetAvailableCells();
-            QueenWhite.SetAvailableCells();
-            KingWhite.SetAvailableCells();
-            KingBlack.SetAvailableCells();
-
-
-
+            #endregion
         }
 
         public void Show()
@@ -117,7 +112,7 @@ namespace HalfChess
                     }
 
                     //Coloring available cells
-                    foreach (var item in KingBlack.AvailableCells)
+                    foreach (var item in Pieces[0].AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
@@ -171,10 +166,10 @@ namespace HalfChess
         {
             WhitePieces = new List<Piece>
             {
-                KingWhite,
-                QueenWhite,
-                RookWhiteLeft,
-                RookWhiteRight
+                Pieces[1],
+                Pieces[2],
+                Pieces[3],
+                Pieces[4]
             };
         }
 

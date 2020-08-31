@@ -282,8 +282,9 @@ namespace HalfChess
                 byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
 
                 //Checking for possible mistakes
-                if (i == board.KingBlack.I && j == board.KingBlack.J)
-                    throw new Exception("You've entered the black king's existing coordinates...");
+                if (i == board.Pieces[0].I && j == board.Pieces[0].J)
+                        throw new Exception("You've entered the black king's existing coordinates...");
+
 
                 //Checking if this piece can go there
                 bool contains = false;
@@ -296,7 +297,20 @@ namespace HalfChess
                     }
                 }
                 if (contains)
+                {
+                    if (board.Matrix[i, j] is Piece)
+                    {
+                        Piece pc = board.Matrix[i, j] as Piece;
+                        board.Pieces.Remove(pc);
+
+                        if (pc.Color == "White")
+                            board.WhitePieces.Remove(pc);
+                        else
+                            Program.Mate();
+                    }
+
                     board.Matrix[i, j] = this;
+                }
                 else
                     throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
 
@@ -307,30 +321,16 @@ namespace HalfChess
 
                 #region Clearing and reloading lists
 
-                board.RookWhiteLeft.EatableCells.Clear();
-                board.RookWhiteRight.EatableCells.Clear();
-                board.KingBlack.EatableCells.Clear();
-                board.KingWhite.EatableCells.Clear();
-                board.QueenWhite.EatableCells.Clear();
-
-                board.RookWhiteLeft.SetEatableCells();
-                board.RookWhiteRight.SetEatableCells();
-                board.QueenWhite.SetEatableCells();
-                board.KingWhite.SetEatableCells();
-                board.KingBlack.SetEatableCells();
-
-
-                board.RookWhiteLeft.AvailableCells.Clear();
-                board.RookWhiteRight.AvailableCells.Clear();
-                board.KingBlack.AvailableCells.Clear();
-                board.KingWhite.AvailableCells.Clear();
-                board.QueenWhite.AvailableCells.Clear();
-
-                board.RookWhiteLeft.SetAvailableCells();
-                board.RookWhiteRight.SetAvailableCells();
-                board.QueenWhite.SetAvailableCells();
-                board.KingWhite.SetAvailableCells();
-                board.KingBlack.SetAvailableCells();
+                foreach (Piece item in board.Pieces)
+                {
+                    item.EatableCells.Clear();
+                    item.SetEatableCells();
+                }
+                foreach (Piece item in board.Pieces)
+                {
+                    item.AvailableCells.Clear();
+                    item.SetAvailableCells();
+                }
 
                 #endregion
 
@@ -340,13 +340,13 @@ namespace HalfChess
             {
                 throw e;
             }
-        } //Needs to be completed: remove a piece when eating
+        }
 
         public bool CanEat(Piece pc)
         {
             bool CanKingEatHim = false;
 
-            foreach (object kingCell in board.KingBlack.AvailableCells)
+            foreach (object kingCell in board.Pieces[0].AvailableCells)
             {
                 if (kingCell == pc)
                 {
