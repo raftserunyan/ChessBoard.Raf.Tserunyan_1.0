@@ -26,8 +26,8 @@ namespace HalfChess
                     Console.Write("Enter new coordinates for the black king (example: 7 F): ");
                     string coordinates = Console.ReadLine();
 
-                    //try
-                    //{
+                    try
+                    {
                         board.Pieces[0].Move(coordinates);
 
                         Thread.Sleep(1200);
@@ -42,14 +42,14 @@ namespace HalfChess
                             Console.ResetColor();
                         }
 
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    Console.WriteLine();
-                    //    Console.ForegroundColor = ConsoleColor.Red;
-                    //    Console.WriteLine(e.Message);
-                    //    Console.ResetColor();
-                    //}
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(e.Message);
+                        Console.ResetColor();
+                    }
                 }
             }
         }
@@ -67,45 +67,44 @@ namespace HalfChess
             Console.ReadKey();
         }
 
-        private static byte s = 0;
         private static void SystemMakeMove()
         {
-            //Random rnd = new Random();
-            //byte ind = (byte)rnd.Next(1, board.WhitePieces.Count);
+            Random rnd = new Random();
+            byte ind = (byte)rnd.Next(1, board.WhitePieces.Count);
 
-            //Piece piece = board.WhitePieces[ind] as Piece;
+            Piece piece = board.WhitePieces[ind] as Piece;
+
+            List<int> MovesForEachCell = new List<int>();
+
+            foreach (object cell in piece.AvailableCells)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (board.Matrix[i, j] == cell)
+                        {
+                            MovesForEachCell.Add(Math.Abs(i - board.Pieces[0].I));
+                        }
+                    }
+                }
+            }
+
+            int minI = GetIndexOfMin(MovesForEachCell);
 
 
-            //List<int> MovesForEachCell = new List<int>();
-
-            //foreach (object cell in piece.AvailableCells)
-            //{
-            //    for (int i = 0; i < 8; i++)
-            //    {
-            //        for (int j = 0; j < 8; j++)
-            //        {
-            //            if (board.Matrix[i, j] == cell)
-            //            {
-            //                MovesForEachCell.Add(Math.Abs(i - board.Pieces[0].I));
-            //            }
-            //        }
-            //    }
-            //}
-
-            //int minI = GetIndexOfMin(MovesForEachCell);
-
-
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    for (int j = 0; j < 8; j++)
-            //    {
-            //        if (board.Matrix[i, j] == piece.AvailableCells[minI])
-            //        {
-            //            piece.Move(i, j);
-            //            Thread.Sleep(1000);
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (board.Matrix[i, j] == piece.AvailableCells[minI])
+                    {
+                        piece.Move(i, j);
+                        Thread.Sleep(1000);
+                        return;
+                    }
+                }
+            }
 
         }
 
@@ -124,11 +123,6 @@ namespace HalfChess
             }
 
             return minI;
-        }
-
-        private static int GetAmountOfMovesToKing(object cell)
-        {
-            return 5;
         }
 
         private static bool IsShakh()

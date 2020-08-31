@@ -118,11 +118,6 @@ namespace HalfChess
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
                     }
-                    foreach (var item in Pieces[3].AvailableCells)
-                    {
-                        if (Matrix[i, j] == item)
-                            Console.BackgroundColor = ConsoleColor.Blue;
-                    }
                     //----------------------------------------------------------------------------------
 
                     //Choosing the right ForeColor for a better UI;

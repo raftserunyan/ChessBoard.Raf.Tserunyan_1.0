@@ -50,7 +50,6 @@ namespace HalfChess
             }
         }
 
-        public byte AmountOfMovesToKing;
 
         public override string ToString()
         {
@@ -63,6 +62,8 @@ namespace HalfChess
             {
                 case "King":
                     {
+                        byte reali = I, realj = J;
+
                         for (int i = I - 1; i < I + 2; i++)
                         {
                             if (i < 0)
@@ -80,50 +81,93 @@ namespace HalfChess
                                 if (i == this.I && j == this.J)
                                     continue;
 
-                                EatableCells.Add(board.Matrix[i, j]);
+                                board.Matrix[I, J] = ' ';
+
+                                //Cheking if going to that destination is not dangerous
+                                bool isShax = false;
+                                foreach (Piece item in board.WhitePieces)
+                                {
+                                    foreach (object cell in item.EatableCells)
+                                    {
+                                        if (board.Matrix[i, j] == cell)
+                                            isShax = true;
+                                    }
+                                }
+
+                                if (!isShax)
+                                    AddToEatListIfNeeded(board.Matrix[i, j]);
+                                board.Matrix[I, J] = this;
                             }
                         }
+
                         break;
                     }
                 case "Queen":
                     {
+                        bool CanGoRight = true, CanGoLeft = true, CanGoUp = true, CanGoDown = true;
+                        bool CanGoUpLeft = true, CanGoUpRight = true, CanGoDownRight = true, CanGoDownLeft = true;
                         for (int t = 1; t < 8; t++)
                         {
-                            if (I - t >= 0)
-                                EatableCells.Add(board.Matrix[I - t, J]);
-                            if (I + t < 8)
-                                EatableCells.Add(board.Matrix[I + t, J]);
-                            if (J + t < 8)
-                                EatableCells.Add(board.Matrix[I, J + t]);
-                            if (J - t >= 0)
-                                EatableCells.Add(board.Matrix[I, J - t]);
+                            if (I - t >= 0 && CanGoUp)
+                                AddToEatListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
+                            if (I + t < 8 && CanGoDown)
+                                AddToEatListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
+                            if (J + t < 8 && CanGoRight)
+                                AddToEatListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
+                            if (J - t >= 0 && CanGoLeft)
+                                AddToEatListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
 
-                            if (I - t >= 0 && J - t >= 0)
-                                EatableCells.Add(board.Matrix[I - t, J - t]);
-                            if (I - t >= 0 && J + t < 8)
-                                EatableCells.Add(board.Matrix[I - t, J + t]);
-                            if (I + t < 8 && J + t < 8)
-                                EatableCells.Add(board.Matrix[I + t, J + t]);
-                            if (I + t < 8 && J - t >= 0)
-                                EatableCells.Add(board.Matrix[I + t, J - t]);
+                            if (I - t >= 0 && J - t >= 0 && CanGoUpLeft)
+                                AddToEatListIfNeeded(board.Matrix[I - t, J - t], ref CanGoUpLeft);
+                            if (I - t >= 0 && J + t < 8 && CanGoUpRight)
+                                AddToEatListIfNeeded(board.Matrix[I - t, J + t], ref CanGoUpRight);
+                            if (I + t < 8 && J + t < 8 && CanGoDownRight)
+                                AddToEatListIfNeeded(board.Matrix[I + t, J + t], ref CanGoDownRight);
+                            if (I + t < 8 && J - t >= 0 && CanGoDownLeft)
+                                AddToEatListIfNeeded(board.Matrix[I + t, J - t], ref CanGoDownLeft);
                         }
                         break;
                     }
                 case "Rook":
                     {
+                        bool CanGoRight = true, CanGoLeft = true, CanGoUp = true, CanGoDown = true;
                         for (int t = 1; t < 8; t++)
                         {
-                            if (I - t >= 0)
-                                EatableCells.Add(board.Matrix[I - t, J]);
-                            if (I + t < 8)
-                                EatableCells.Add(board.Matrix[I + t, J]);
-                            if (J + t < 8)
-                                EatableCells.Add(board.Matrix[I, J + t]);
-                            if (J - t >= 0)
-                                EatableCells.Add(board.Matrix[I, J - t]);
+                            if (I - t >= 0 && CanGoUp)
+                                AddToEatListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
+                            if (I + t < 8 && CanGoDown)
+                                AddToEatListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
+                            if (J + t < 8 && CanGoRight)
+                                AddToEatListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
+                            if (J - t >= 0 && CanGoLeft)
+                                AddToEatListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
                         }
                         break;
                     }
+            }
+        }
+        private void AddToEatListIfNeeded(object newPiece)
+        {
+            if (!(newPiece is Piece))
+                EatableCells.Add(newPiece);
+            else
+            {
+                Piece piece = newPiece as Piece;
+                if (piece.Color != this.Color)
+                    EatableCells.Add(piece);
+            }
+        }
+        private void AddToEatListIfNeeded(object newPiece, ref bool direction)
+        {
+            if (!(newPiece is Piece))
+                EatableCells.Add(newPiece);
+            else
+            {
+                Piece piece = newPiece as Piece;
+                if (piece.Color == this.Color)
+                    direction = false;
+                else
+                    EatableCells.Add(newPiece);
             }
         }
 
@@ -242,7 +286,6 @@ namespace HalfChess
                     }
             }
         }
-
         private void AddToListIfNeeded(object newPiece)
         {
             if (!(newPiece is Piece))
@@ -348,15 +391,6 @@ namespace HalfChess
                 Piece piece = board.Matrix[I, J] as Piece;
 
                 //Checking if this piece can go there
-                bool contains = false;
-                foreach (var item in this.AvailableCells)
-                {
-                    if (item == board.Matrix[i, j])
-                    {
-                        contains = true;
-                        break;
-                    }
-                }
                 if (board.Matrix[i, j] is Piece)
                 {
                     Piece pc = board.Matrix[i, j] as Piece;
