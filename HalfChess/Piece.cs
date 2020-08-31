@@ -183,10 +183,22 @@ namespace HalfChess
                 //Checking for possible mistakes
                 if (i == board.KingBlack.I && j == board.KingBlack.J)
                     throw new Exception("You've entered the black king's existing coordinates...");
-                if (AvailableCells.Contains(board.Matrix[i, j]))
-                    board.Matrix[i, j] = piece;
+
+                //Checking if this piece can go there
+                bool contains = false;
+                foreach (var item in this.AvailableCells)
+                {
+                    if (item == board.Matrix[i, j])
+                    {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (contains)
+                    board.Matrix[i, j] = this;
                 else
                     throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
+
 
                 board.Matrix[I, J] = ' ';
                 I = i;
