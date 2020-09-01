@@ -21,7 +21,7 @@ namespace HalfChess
 
             Pieces = new List<Piece>
             {
-                new Piece("King", "Black", 4, 4),
+                new Piece("King", "Black", 0, 4),
                 new Piece("King", "White", 7, 4),
                 new Piece("Queen", "White", 7, 3),
                 new Piece("Rook", "White", 7, 0),

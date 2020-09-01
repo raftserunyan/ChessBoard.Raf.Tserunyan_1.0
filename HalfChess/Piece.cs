@@ -19,6 +19,7 @@ namespace HalfChess
 
         public string Color { get; set; }
         public string Name { get; set; }
+        public int MinI { get; set; }
 
         public byte I;
         private int i
@@ -317,8 +318,8 @@ namespace HalfChess
 
         public void Move(string coordinates)
         {
-            try
-            {
+            //try
+            //{
                 Piece piece = board.Matrix[I, J] as Piece;
 
                 byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
@@ -378,16 +379,16 @@ namespace HalfChess
                 #endregion
 
                 board.Show();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw e;
+            //}
         }
         public void Move(int i, int j)
         {
-            try
-            {
+            //try
+            //{
                 Piece piece = board.Matrix[I, J] as Piece;
 
                 //Checking if this piece can go there
@@ -425,11 +426,11 @@ namespace HalfChess
                 #endregion
 
                 board.Show();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw e;
+            //}
         }
 
         public bool CanEat(Piece piece)
