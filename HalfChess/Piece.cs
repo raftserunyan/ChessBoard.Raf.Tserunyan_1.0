@@ -318,80 +318,32 @@ namespace HalfChess
 
         public void Move(string coordinates)
         {
-            //try
-            //{
+            try
+            {
                 Piece piece = board.Matrix[I, J] as Piece;
 
-                byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
-                byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
+            if (String.IsNullOrEmpty(coordinates))
+                throw new Exception("You haven't entered anything, try again...");
+            byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
+            byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
 
-                //Checking for possible mistakes
-                if (i == board.Pieces[0].I && j == board.Pieces[0].J)
-                    throw new Exception("You've entered the black king's existing coordinates...");
+            //Checking for possible mistakes
+            if (i == board.Pieces[0].I && j == board.Pieces[0].J)
+                throw new Exception("You've entered the black king's existing coordinates...");
 
 
-                //Checking if this piece can go there
-                bool contains = false;
-                foreach (var item in this.AvailableCells)
+            //Checking if this piece can go there
+            bool contains = false;
+            foreach (var item in this.AvailableCells)
+            {
+                if (item == board.Matrix[i, j])
                 {
-                    if (item == board.Matrix[i, j])
-                    {
-                        contains = true;
-                        break;
-                    }
+                    contains = true;
+                    break;
                 }
-                if (contains)
-                {
-                    if (board.Matrix[i, j] is Piece)
-                    {
-                        Piece pc = board.Matrix[i, j] as Piece;
-                        board.Pieces.Remove(pc);
-
-                        if (pc.Color == "White")
-                            board.WhitePieces.Remove(pc);
-                        else
-                            Program.Mate();
-                    }
-
-                    board.Matrix[i, j] = this;
-                }
-                else
-                    throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
-
-
-                board.Matrix[I, J] = ' ';
-                I = i;
-                J = j;
-
-                #region Clearing and reloading lists
-
-                foreach (Piece item in board.Pieces)
-                {
-                    item.EatableCells.Clear();
-                    item.SetEatableCells();
-                }
-                foreach (Piece item in board.Pieces)
-                {
-                    item.AvailableCells.Clear();
-                    item.SetAvailableCells();
-                }
-
-                #endregion
-
-                board.Show();
-            //}
-            //catch (Exception e)
-            //{
-            //    throw e;
-            //}
-        }
-        public void Move(int i, int j)
-        {
-            //try
-            //{
-                Piece piece = board.Matrix[I, J] as Piece;
-
-                //Checking if this piece can go there
+            }
+            if (contains)
+            {
                 if (board.Matrix[i, j] is Piece)
                 {
                     Piece pc = board.Matrix[i, j] as Piece;
@@ -404,33 +356,83 @@ namespace HalfChess
                 }
 
                 board.Matrix[i, j] = this;
+            }
+            else
+                throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
 
 
-                board.Matrix[I, J] = ' ';
-                I = (byte)i;
-                J = (byte)j;
+            board.Matrix[I, J] = ' ';
+            I = i;
+            J = j;
 
-                #region Clearing and reloading lists
+            #region Clearing and reloading lists
 
-                foreach (Piece item in board.Pieces)
-                {
-                    item.EatableCells.Clear();
-                    item.SetEatableCells();
-                }
-                foreach (Piece item in board.Pieces)
-                {
-                    item.AvailableCells.Clear();
-                    item.SetAvailableCells();
-                }
+            foreach (Piece item in board.Pieces)
+            {
+                item.EatableCells.Clear();
+                item.SetEatableCells();
+            }
+            foreach (Piece item in board.Pieces)
+            {
+                item.AvailableCells.Clear();
+                item.SetAvailableCells();
+            }
 
-                #endregion
+            #endregion
 
-                board.Show();
-            //}
-            //catch (Exception e)
-            //{
-            //    throw e;
-            //}
+            board.Show();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void Move(int i, int j)
+        {
+            try
+            {
+                Piece piece = board.Matrix[I, J] as Piece;
+
+            //Checking if this piece can go there
+            if (board.Matrix[i, j] is Piece)
+            {
+                Piece pc = board.Matrix[i, j] as Piece;
+                board.Pieces.Remove(pc);
+
+                if (pc.Color == "White")
+                    board.WhitePieces.Remove(pc);
+                else
+                    Program.Mate();
+            }
+
+            board.Matrix[i, j] = this;
+
+
+            board.Matrix[I, J] = ' ';
+            I = (byte)i;
+            J = (byte)j;
+
+            #region Clearing and reloading lists
+
+            foreach (Piece item in board.Pieces)
+            {
+                item.EatableCells.Clear();
+                item.SetEatableCells();
+            }
+            foreach (Piece item in board.Pieces)
+            {
+                item.AvailableCells.Clear();
+                item.SetAvailableCells();
+            }
+
+            #endregion
+
+            board.Show();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public bool CanEat(Piece piece)
