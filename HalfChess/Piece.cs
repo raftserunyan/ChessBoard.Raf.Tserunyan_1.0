@@ -63,8 +63,6 @@ namespace HalfChess
             {
                 case "King":
                     {
-                        byte reali = I, realj = J;
-
                         for (int i = I - 1; i < I + 2; i++)
                         {
                             if (i < 0)
@@ -82,25 +80,16 @@ namespace HalfChess
                                 if (i == this.I && j == this.J)
                                     continue;
 
-                                board.Matrix[I, J] = ' ';
-
-                                //Cheking if going to that destination is not dangerous
-                                bool isShax = false;
-                                foreach (Piece item in board.WhitePieces)
+                                if (board.Matrix[i, j] is Piece)
                                 {
-                                    foreach (object cell in item.EatableCells)
-                                    {
-                                        if (board.Matrix[i, j] == cell)
-                                            isShax = true;
-                                    }
+                                    Piece p = board.Matrix[i, j] as Piece;
+                                    if (p.Color != this.Color)
+                                        this.EatableCells.Add(board.Matrix[i, j]);
                                 }
-
-                                if (!isShax)
-                                    AddToEatListIfNeeded(board.Matrix[i, j]);
-                                board.Matrix[I, J] = this;
+                                else
+                                        this.EatableCells.Add(board.Matrix[i, j]);
                             }
                         }
-
                         break;
                     }
                 case "Queen":
@@ -145,17 +134,6 @@ namespace HalfChess
                         }
                         break;
                     }
-            }
-        }
-        private void AddToEatListIfNeeded(object newPiece)
-        {
-            if (!(newPiece is Piece))
-                EatableCells.Add(newPiece);
-            else
-            {
-                Piece piece = newPiece as Piece;
-                if (piece.Color != this.Color)
-                    EatableCells.Add(piece);
             }
         }
         private void AddToEatListIfNeeded(object newPiece, ref bool direction)
@@ -213,31 +191,6 @@ namespace HalfChess
                                 if (!isShax)
                                     AddToListIfNeeded(board.Matrix[i, j]);
                                 board.Matrix[I, J] = this;
-
-                                //Board brd = (Board)board.Clone();
-                                //isShax = false;
-
-                                //brd.Matrix[i, j] = this;
-                                //brd.Matrix[I, J] = ' ';
-                                //I = (byte)i; J = (byte)j;
-                                //foreach (Piece pc in brd.WhitePieces)
-                                //{
-                                //    bool t = true;
-                                //    if (t)
-                                //    {
-                                //        foreach (object cell in pc.AvailableCells)
-                                //        {
-                                //            if (cell == this)
-                                //            {
-                                //                isShax = true;
-                                //                t = false;
-                                //                break;
-                                //            }
-                                //        }
-                                //    }
-                                //    else
-                                //        break;
-                                //}
                             }
                         }
 
@@ -249,15 +202,6 @@ namespace HalfChess
                         bool CanGoUpLeft = true, CanGoUpRight = true, CanGoDownRight = true, CanGoDownLeft = true;
                         for (int t = 1; t < 8; t++)
                         {
-                            if (I - t >= 0 && CanGoUp)
-                                AddToListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
-                            if (I + t < 8 && CanGoDown)
-                                AddToListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
-                            if (J + t < 8 && CanGoRight)
-                                AddToListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
-                            if (J - t >= 0 && CanGoLeft)
-                                AddToListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
-
                             if (I - t >= 0 && J - t >= 0 && CanGoUpLeft)
                                 AddToListIfNeeded(board.Matrix[I - t, J - t], ref CanGoUpLeft);
                             if (I - t >= 0 && J + t < 8 && CanGoUpRight)
@@ -266,6 +210,15 @@ namespace HalfChess
                                 AddToListIfNeeded(board.Matrix[I + t, J + t], ref CanGoDownRight);
                             if (I + t < 8 && J - t >= 0 && CanGoDownLeft)
                                 AddToListIfNeeded(board.Matrix[I + t, J - t], ref CanGoDownLeft);
+
+                            if (I - t >= 0 && CanGoUp)
+                                AddToListIfNeeded(board.Matrix[I - t, J], ref CanGoUp);
+                            if (I + t < 8 && CanGoDown)
+                                AddToListIfNeeded(board.Matrix[I + t, J], ref CanGoDown);
+                            if (J + t < 8 && CanGoRight)
+                                AddToListIfNeeded(board.Matrix[I, J + t], ref CanGoRight);
+                            if (J - t >= 0 && CanGoLeft)
+                                AddToListIfNeeded(board.Matrix[I, J - t], ref CanGoLeft);
                         }
                         break;
                     }
@@ -322,65 +275,79 @@ namespace HalfChess
             {
                 Piece piece = board.Matrix[I, J] as Piece;
 
-            if (String.IsNullOrEmpty(coordinates))
-                throw new Exception("You haven't entered anything, try again...");
-            byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
-            byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
+                if (String.IsNullOrEmpty(coordinates))
+                    throw new Exception("You haven't entered anything, try again...");
+                byte i = (byte)(8 - byte.Parse(coordinates.Substring(0, 1)));
+                byte j = (byte)(Convert.ToByte(Convert.ToChar(coordinates.Substring(2, 1).ToUpper())) - 65);
 
-            //Checking for possible mistakes
-            if (i == board.Pieces[0].I && j == board.Pieces[0].J)
-                throw new Exception("You've entered the black king's existing coordinates...");
+                //Checking for possible mistakes
+                if (i == board.Pieces[0].I && j == board.Pieces[0].J)
+                    throw new Exception("You've entered the black king's existing coordinates...");
 
 
-            //Checking if this piece can go there
-            bool contains = false;
-            foreach (var item in this.AvailableCells)
-            {
-                if (item == board.Matrix[i, j])
+                //Checking if this piece can go there
+                bool contains = false;
+                foreach (var item in this.AvailableCells)
                 {
-                    contains = true;
-                    break;
+                    if (item == board.Matrix[i, j])
+                    {
+                        contains = true;
+                        break;
+                    }
                 }
-            }
-            if (contains)
-            {
-                if (board.Matrix[i, j] is Piece)
+                if (contains)
                 {
-                    Piece pc = board.Matrix[i, j] as Piece;
-                    board.Pieces.Remove(pc);
+                    if (board.Matrix[i, j] is Piece)
+                    {
+                        Piece pc = board.Matrix[i, j] as Piece;
+                        board.Pieces.Remove(pc);
 
-                    if (pc.Color == "White")
-                        board.WhitePieces.Remove(pc);
-                    else
-                        Program.Mate();
+                        if (pc.Color == "White")
+                        {
+                            board.WhitePieces.Remove(pc);
+                            if (pc == board.Pieces[1])
+                            {
+                                Program.isMate = true;
+
+                                board.Pieces[0].AvailableCells.Clear();
+                                Console.Clear();
+                                board.Show();
+
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("You Won! Congratulations!!");
+                                Console.ReadKey();
+                            }
+                        }
+                        else
+                            Program.Mate();
+                    }
+
+                    board.Matrix[i, j] = this;
+                }
+                else
+                    throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
+
+
+                board.Matrix[I, J] = ' ';
+                I = i;
+                J = j;
+
+                #region Clearing and reloading lists
+
+                foreach (Piece item in board.Pieces)
+                {
+                    item.EatableCells.Clear();
+                    item.SetEatableCells();
+                }
+                foreach (Piece item in board.Pieces)
+                {
+                    item.AvailableCells.Clear();
+                    item.SetAvailableCells();
                 }
 
-                board.Matrix[i, j] = this;
-            }
-            else
-                throw new Exception($"You cant move to the destination {coordinates.ToUpper()}, \n Something's blocking your way or your piece just can't go there.");
+                #endregion
 
-
-            board.Matrix[I, J] = ' ';
-            I = i;
-            J = j;
-
-            #region Clearing and reloading lists
-
-            foreach (Piece item in board.Pieces)
-            {
-                item.EatableCells.Clear();
-                item.SetEatableCells();
-            }
-            foreach (Piece item in board.Pieces)
-            {
-                item.AvailableCells.Clear();
-                item.SetAvailableCells();
-            }
-
-            #endregion
-
-            board.Show();
+                board.Show();
             }
             catch (Exception e)
             {
@@ -393,41 +360,41 @@ namespace HalfChess
             {
                 Piece piece = board.Matrix[I, J] as Piece;
 
-            //Checking if this piece can go there
-            if (board.Matrix[i, j] is Piece)
-            {
-                Piece pc = board.Matrix[i, j] as Piece;
-                board.Pieces.Remove(pc);
+                //Checking if this piece can go there
+                if (board.Matrix[i, j] is Piece)
+                {
+                    Piece pc = board.Matrix[i, j] as Piece;
+                    board.Pieces.Remove(pc);
 
-                if (pc.Color == "White")
-                    board.WhitePieces.Remove(pc);
-                else
-                    Program.Mate();
-            }
+                    if (pc.Color == "White")
+                        board.WhitePieces.Remove(pc);
+                    else
+                        Program.Mate();
+                }
 
-            board.Matrix[i, j] = this;
+                board.Matrix[i, j] = this;
 
 
-            board.Matrix[I, J] = ' ';
-            I = (byte)i;
-            J = (byte)j;
+                board.Matrix[I, J] = ' ';
+                I = (byte)i;
+                J = (byte)j;
 
-            #region Clearing and reloading lists
+                #region Clearing and reloading lists
 
-            foreach (Piece item in board.Pieces)
-            {
-                item.EatableCells.Clear();
-                item.SetEatableCells();
-            }
-            foreach (Piece item in board.Pieces)
-            {
-                item.AvailableCells.Clear();
-                item.SetAvailableCells();
-            }
+                foreach (Piece item in board.Pieces)
+                {
+                    item.EatableCells.Clear();
+                    item.SetEatableCells();
+                }
+                foreach (Piece item in board.Pieces)
+                {
+                    item.AvailableCells.Clear();
+                    item.SetAvailableCells();
+                }
 
-            #endregion
+                #endregion
 
-            board.Show();
+                board.Show();
             }
             catch (Exception e)
             {

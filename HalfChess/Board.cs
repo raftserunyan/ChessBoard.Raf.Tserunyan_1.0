@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HalfChess
 {
-    public class Board : ICloneable
+    public class Board
     {
         public List<Piece> Pieces, WhitePieces;
         public object[,] Matrix;
@@ -111,14 +111,12 @@ namespace HalfChess
                         }
                     }
 
-                    //----------------------------------------------------------------------------------
                     //Coloring available cells
                     foreach (var item in Pieces[0].AvailableCells)
                     {
                         if (Matrix[i, j] == item)
                             Console.BackgroundColor = ConsoleColor.Green;
                     }
-                    //----------------------------------------------------------------------------------
 
                     //Choosing the right ForeColor for a better UI;
                     switch (Console.BackgroundColor)
@@ -173,11 +171,6 @@ namespace HalfChess
                 Pieces[3],
                 Pieces[4]
             };
-        }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
         }
     }
 }

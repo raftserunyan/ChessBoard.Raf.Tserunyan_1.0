@@ -7,7 +7,7 @@ namespace HalfChess
     class Program
     {
         static Board board;
-        static bool isMate = false;
+        public static bool isMate = false;
 
         static void Main(string[] args)
         {
@@ -30,8 +30,29 @@ namespace HalfChess
                     {
                         board.Pieces[0].Move(coordinates);
 
+                        if (board.WhitePieces.Count < 2)
+                        {
+                            Program.isMate = true;
+
+                            board.Pieces[0].AvailableCells.Clear();
+                            Console.Clear();
+                            board.Show();
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("You Won! Congratulations!!");
+                            Console.ReadKey();
+                        }
+
                         Thread.Sleep(1200);
-                        SystemMakeMove();
+                        try
+                        {
+                            SystemMakeMove();
+                        }
+                        catch (Exception e)
+                        {
+                            if (e.Message == "raf")
+                                SystemMakeMove();
+                        }
 
                         //Check for shakh
                         if (IsShakh())
@@ -41,7 +62,6 @@ namespace HalfChess
                             Console.WriteLine("System> Shakh!");
                             Console.ResetColor();
                         }
-
                     }
                     catch (Exception e)
                     {
@@ -86,69 +106,73 @@ namespace HalfChess
         }
         private static void SystemMakeMove()
         {
-
             Piece piece = board.WhitePieces[ind++];
 
-            List<int> IForEachCell = new List<int>();
+            List<int> lst = new List<int>();
 
-            foreach (object cell in piece.AvailableCells)
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (board.Matrix[i, j] == cell)
-                        {
-                            if (j - board.Pieces[0].J != 1)
-                                IForEachCell.Add(Math.Abs(i - board.Pieces[0].I));
-                            else
-                                IForEachCell.Add(888);
-                        }
-                    }
-                }
-            }
-
-            int minI = GetIndexOfMin(IForEachCell);
-
-            bool t = true;
             for (int i = 0; i < 8; i++)
             {
-                if (t)
+                for (int j = 0; j < 8; j++)
                 {
-                    for (int j = 0; j < 8; j++)
+                    for (int c = 0; c < piece.AvailableCells.Count; c++)
                     {
-                        if (board.Matrix[i, j] == piece.AvailableCells[minI])
+                        if (board.Matrix[i, j] == piece.AvailableCells[c])
                         {
-                            if (minI == 888)
+                            bool letgo = true;
+                            foreach (object kcell in board.Pieces[0].EatableCells)
                             {
-                                ind++;
-                                t = false;
-                                break;
+                                if (kcell == board.Matrix[i, j])
+                                {
+                                    letgo = false;
+                                    break;
+                                }
                             }
-                            piece.Move(i, j);
-                            Thread.Sleep(1000);
-                            return;
+
+                            if (letgo)
+                            {
+                                if (i == board.Pieces[0].I || Math.Abs(i - board.Pieces[0].I) == 1)
+                                {
+                                    bool g = true;
+                                    foreach (Piece item in board.WhitePieces)
+                                    {
+                                        if (item.I == i)
+                                        {
+                                            g = false;
+                                            break;
+                                        }
+                                    }
+                                    if (g)
+                                        lst.Add(c);
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
 
-        private static int GetIndexOfMin(List<int> list)
-        {
-            int min = list[0];
-            int minI = 0;
-
-            for (int i = 0; i < list.Count; i++)
+            if (lst.Count > 0)
             {
-                if (list[i] < min)
+                Random rnd = new Random();
+                int indx = rnd.Next(0, lst.Count);
+
+                bool t = true;
+                for (int i = 0; i < 8; i++)
                 {
-                    min = list[i];
-                    minI = i;
+                    if (t)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (board.Matrix[i, j] == piece.AvailableCells[lst[indx]])
+                            {
+                                piece.Move(i, j);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
-
-            return minI;
+            else
+                throw new Exception("raf");
         }
 
         private static bool IsShakh()
